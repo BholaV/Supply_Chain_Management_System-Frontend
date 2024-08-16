@@ -3,6 +3,7 @@ import './SupplierCard.css'
 import { MdDelete } from "react-icons/md";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 export default function SupplierCard() {
     const [supplierDetail,setSupplierDetail] = useState([]);
     const style = {
@@ -18,6 +19,33 @@ export default function SupplierCard() {
             console.log(err);
         });
     },[])
+    const handleEdit = (id) => {
+
+    }
+    const handleDelete = (id, index) => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You want to delete this supplier?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.delete(`http://localhost:3001/supplier/removeSupplier/${id}`)
+              .then(result => {
+                const newSupplierDetail = [...supplierDetail];
+                newSupplierDetail.splice(index, 1);
+                setSupplierDetail(newSupplierDetail);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            Swal.fire('Deleted!', 'Supplier has been deleted successfully.', 'success');
+          }
+        });
+      }
     return <>
         <section id='supply' style={style}>
             {supplierDetail?.map((data,index)=>
@@ -35,7 +63,7 @@ export default function SupplierCard() {
                             </svg>
                         </button>
                     </div>
-                    <button class="button mt-0">
+                    <button class="button mt-0" onClick={()=>handleDelete(data._id,index)}>
                         <svg viewBox="0 0 448 512" class="svgIcon"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
                     </button>
                 </div>

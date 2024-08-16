@@ -130,7 +130,7 @@ const handleCategory = (event) => {
                 </div>
                     {categoryError && <div style={{ color: 'red' }}>{categoryError}</div>}
                 <button class="button-submit">Create Account</button>
-                <p class="p">Already have a account? <span class="span">login</span></p>
+                {/* <p class="p">Already have a account? <span class="span">login</span></p> */}
                 <div class="flex-row">
                 </div>
             </form>

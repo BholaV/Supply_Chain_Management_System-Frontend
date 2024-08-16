@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css'
 import Swal from 'sweetalert2';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ function Signin() {
     const [email, setEmail] = useState("");
     const [pass, setPassword] = useState("");
     const [error, setError] = useState(null);
-
+    const navigate = useNavigate("")
     const style = {
         backgroundImage: 'url("./Image/back.jpg")',
         backgroundSize: '100% 100%',
@@ -37,6 +37,8 @@ function Signin() {
                 title: "Sign in successfully..",
                 // text: "Something went wrong!",
             });
+            localStorage.setItem("user",result.data.user)
+            navigate("/home")
             setEmail("");
             setPassword("");
         }).catch(err => {
