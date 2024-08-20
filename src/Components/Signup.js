@@ -1,41 +1,40 @@
 import { Link } from 'react-router-dom';
-import './Signup.css'
+import './Signup.css';
 import axios from 'axios';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-
-
-// import {configDotenv} from 'dotenv';
-// configDotenv();
+import Cookies from 'js-cookie';
 function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setusername] = useState("");
     const [error, setError] = useState(null);
     const [passErr, setPassErr] = useState(null);
-    const [checkErr, setCheckErr] = useState(null);
+    const [nameError, setNameError] = useState(null);
     const style = {
-        backgroundImage: 'url("./Image/back.jpg")',
-        backgroundSize: '100% 100%',
-        backgroundRepeat: 'no-repeat',
-        height: '100vh'
+        backgroundColor: '#e3f2fd', // Light blue background for the whole page
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     };
 
     const handleEmailChange = (event) => {
         const emailValue = event.target.value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        setEmail(event.target.value)
+        setEmail(event.target.value);
         if (emailRegex.test(emailValue)) {
             setError(null);
         } else {
             setError('Invalid email address');
         }
     };
+
     const handlePassword = (event) => {
         const passValue = event.target.value;
-        setPassword(event.target.value)
+        setPassword(event.target.value);
         if (passValue.length <= 5) {
-            setPassErr('Password length must more than 5');
+            setPassErr('Password length must be more than 5 characters');
         } else {
             setPassErr(null);
         }
@@ -43,94 +42,81 @@ function Signup() {
 
     const checkUserName = (e) => {
         const username = e.target.value.trim();
-        const nameError = document.getElementById("name");
         let status = true;
-      
-        if (username.length === 0) {
-          status = false;
-          nameError.innerHTML = "Name is required";
-          nameError.style.color = 'red';
-        } else if (!/^[a-zA-Z ]+$/.test(username)) {
-          status = false;
-          nameError.innerHTML = "Name must be characters and spaces only";
-          nameError.style.color = 'red';
-        } else {
-          nameError.innerHTML = "";
-          setusername(username);
-          status = true;
-        }
-      
-        return status;
-      }
 
-      console.log(process.env.USER_SIGN_UP)
+        if (username.length === 0) {
+            setNameError("Name is required");
+            status = false;
+        } else if (!/^[a-zA-Z ]+$/.test(username)) {
+            setNameError("Name must be alphabetic characters only");
+            status = false;
+        } else {
+            setNameError(null);
+            setusername(username);
+            status = true;
+        }
+        return status;
+    };
+
     const Register = (e) => {
         e.preventDefault();
         if (checkUserName && username && password && email) {
-            axios.post("http://localhost:3001/user/SignUp", { email, password, username }).then(result => {
-                console.log(result)
-                console.log(result.data.message)
-                if (result.data.message == 'User already exist') {
+            axios.post("http://localhost:3001/user/SignUp", { email, password, username })
+                .then(result => {
+                    if (result.data.message === 'User already exist') {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Account already exists",
+                        });
+                    } else {
+                        const token = result.data.token;
+                        console.log(token)
+                        Cookies.set('token', token, { expires: 7, secure: true });
+                        Swal.fire({
+                            icon: "success",
+                            title: "Account created successfully",
+                        });
+                    }
+                    setEmail("");
+                    setPassword("");
+                    setusername("");
+                    e.target.reset();
+                })
+                .catch(err => {
                     Swal.fire({
                         icon: "error",
-                        title: "Account is already exist..",
-                        // text: "Something went wrong!",
+                        title: "Something went wrong",
                     });
-                } else
-                    Swal.fire({
-                        icon: "success",
-                        title: "Account created successfully..",
-                        // text: "Something went wrong!",
-                    });
-                setEmail("");
-                setPassword("");
-                setusername("");
-                e.target.reset();
-            }).catch(err => {
-                console.log(err);
-                Swal.fire({
-                    icon: "error",
-                    title: "Something went wrong",
-                    // text: "Something went wrong!",
                 });
-            })
-        }else{
-
         }
-    }
-    return <>
+    };
+
+    return (
         <section style={style}>
-            <div class="background">
-                <div class="shape"></div>
-                <div class="shape"></div>
-            </div>
-            <div id='form' class='d-flex' style={{ height: '600px' }}>
-                <form onSubmit={Register}>
-                    <h3>Create Account Here</h3>
-                    <label for="password" className='mt-2'> Username</label>
-                    <input required onChange={checkUserName} type="text" placeholder="username" />
-                    <span id='name'></span>
-                    <label className='mt-2' for="username" >Email</label>
-                    <input required onChange={handleEmailChange} type="text" value={email} placeholder="Enter your email" id="username" />
-                    {error && <div style={{ color: 'red' }}>{error}</div>}
-                    <label for="password" className='mt-2'>Password</label>
-                    <input required onChange={handlePassword} type="password" value={password} placeholder="Password" id="password" />
-                    {passErr && <div style={{ color: 'red' }}>{passErr}</div>}
-                    {checkErr && <div style={{ color: 'red' }}>{checkErr}</div>}
-                    <button className='mt-3' type='submit'>Register</button>
-                    <Link to="/signin">
-                        <p className='m-2'>Already have account ?</p>
-                    </Link>
-                    <div class="social">
-                        <div class="go"><i class="fab fa-google"></i> Google</div>
-                        <div class="fb"><i class="fab fa-facebook"></i> Facebook</div>
-                    </div>
-                </form>
-                <div id='right' style={{ marginLeft: '20px' }} >
+            <div id="form-container-signup">
+                <div id="form">
+                    <form onSubmit={Register}>
+                        <h3>Create Account Here</h3>
+                        <label htmlFor="username">Username</label>
+                        <input required onChange={checkUserName} type="text" placeholder="Enter your username" />
+                        {nameError && <div style={{ color: 'red' }}>{nameError}</div>}
+                        <label htmlFor="email">Email</label>
+                        <input required onChange={handleEmailChange} type="text" value={email} placeholder="Enter your email" />
+                        {error && <div style={{ color: 'red' }}>{error}</div>}
+                        <label htmlFor="password">Password</label>
+                        <input required onChange={handlePassword} type="password" value={password} placeholder="Enter your password" />
+                        {passErr && <div style={{ color: 'red' }}>{passErr}</div>}
+                        <button type="submit" className='mb-2'>Register</button>
+                        <Link to="/signin">
+                            <p>Already have an account? Sign in here</p>
+                        </Link>
+                    </form>
                 </div>
+                <div id="right-signup">
+                </div> {/* This is the right section with the image */}
             </div>
         </section>
-    </>
+    );
 }
 
 export default Signup;

@@ -8,16 +8,20 @@ import SupplierCard from './Components/SupplierCard';
 import SupplierAccCreation from './Components/SupplierAccCreation';
 import Auth from './Components/Auth';
 import ProductInventry from './Components/ProductInventry';
+import StockAlert from './Components/StockAlert';
+import MyOrder from './Components/MyOrder';
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={<Signup />} />
+        <Route path='/signup' element={<Signup />} />
         <Route path='/signin' element={<Signin />} />
-        <Route path='/home' element={<Auth><Home /></Auth>}>
+        <Route path='/' element={<Auth><Home /></Auth>}>
             <Route index element={<SupplierCard />} />
              <Route path='addSupplier' element={<SupplierAccCreation/>}/>
              <Route path='product' element={<ProductInventry/>}/>
+             <Route path='notification' element={<StockAlert/>}/>
+             <Route path='myorder' element={<MyOrder/>}/>
         </Route>
         <Route path='/card' element={<SupplierCard />} />
       </Routes>
