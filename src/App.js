@@ -10,6 +10,7 @@ import Auth from './Components/Auth';
 import ProductInventry from './Components/ProductInventry';
 import StockAlert from './Components/StockAlert';
 import MyOrder from './Components/MyOrder';
+import NoRouteFound from './Components/NoRouteFound';
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
              <Route path='myorder' element={<MyOrder/>}/>
         </Route>
         <Route path='/card' element={<SupplierCard />} />
+        <Route path='*' element={<NoRouteFound/>}/>
       </Routes>
     </div>
   );

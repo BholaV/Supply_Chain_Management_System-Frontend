@@ -15,7 +15,7 @@ function ProductInventry() {
         });
     }, [])
 
-    const changeImg = (productImg, ind, index) => {
+    const changeImg = (productImg, index) => {
         const thumbnail = document.getElementById(`thumbnail-${index}`);
         thumbnail.src = productImg;
     }
@@ -60,7 +60,7 @@ function ProductInventry() {
             {product?.map((data, index) => <div id="product-invt" key={index} >
                 <img src={data.thumbnail} width="250px" height="250px" id={`thumbnail-${index}`} />
                 <div className="d-flex w-100 justify-content-center p-2">{data.images?.map((product, ind) =>
-                    <div key={ind} className="border ms-4" style={{ cursor: 'pointer' }} onClick={() => changeImg(product, ind, index)}><img src={product} alt="image" style={{ width: '50px', height: '50px' }} /></div>
+                    <div key={ind} className="border ms-4" style={{ cursor: 'pointer' }} onClick={() => changeImg(product, index)}><img src={product} alt="image" style={{ width: '50px', height: '50px' }} /></div>
                 )}
                 </div>
                 <h4 >{data.title.slice(0, 15)}</h4>

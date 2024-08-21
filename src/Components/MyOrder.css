@@ -140,4 +140,9 @@
         width: 350px;
     }
   }
-  
+  @media screen and (max-width: 990px) {
+
+  #myOrder-child-div{
+    flex-direction: column !important;
+  }
+}
