@@ -27,7 +27,7 @@ function ProductInventry() {
       
         Swal.fire({
           title: 'Are you sure?',
-          text: `Do you want to create an order for ${product.name}?`,
+          text: `Do you want to create an order for ${product.title}?`,
           icon: 'question',
           showCancelButton: true,
           confirmButtonText: 'Yes, create order',
@@ -54,6 +54,7 @@ function ProductInventry() {
           }
         })
       }
+      
     return <>
         {/* <h1>Product Inventory</h1> */}
         <section id="product-inventry-parent" >
