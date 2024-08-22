@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css'; // You can use the same CSS for both Signin and Signup
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 function Signin() {
     const [email, setEmail] = useState("");
@@ -29,28 +30,39 @@ function Signin() {
         }
     };
 
-    const login = (e) => {
+    const login = async (e) => {
         e.preventDefault();
-        
-        axios.post("http://localhost:3001/user/Signin", { email, password: pass })
-            .then(result => {
+        const token = Cookies.get('token');
+    
+        try {
+            if (token) {
+                const result = await axios.post("http://localhost:3001/user/signin", { email, password: pass, token });
+                
                 Swal.fire({
                     icon: "success",
                     title: "Sign in successfully",
                 });
-                localStorage.setItem("user",JSON.stringify(result.data.user) );
+    
+                localStorage.setItem("user", JSON.stringify(result.data.user));
                 navigate("/");
                 setEmail("");
                 setPassword("");
-            })
-            .catch(err => {
-                console.log(err)
-                Swal.fire({
-                    icon: "error",
-                    title: err.response.data.error,
-                });
+            } else {
+                const result = await axios.post("http://localhost:3001/user/generateToken", { email });
+                
+                Cookies.set("token", result.data.token);
+                login(e); // Retry login with new token
+            }
+        } catch (err) {
+            console.error(err);
+    
+            Swal.fire({
+                icon: "error",
+                title: err.response?.data?.error || "An error occurred",
             });
+        }
     };
+    
 
     return (
         <section style={style}>

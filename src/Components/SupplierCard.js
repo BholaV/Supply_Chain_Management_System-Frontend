@@ -72,7 +72,7 @@ export default function SupplierCard() {
       setPhonErr("Contact must be a 10-digit number.");
       return;
     }
-    if (!/^[a-zA-Z]+$/.test(productCategory)) {
+    if (!/^[a-zA-Z\s]+$/.test(productCategory)) {
       setProductCategoryErr('Product category must be alphabetic.')
       return;
     }

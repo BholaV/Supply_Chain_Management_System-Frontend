@@ -19,6 +19,7 @@ function ProductInventry() {
         const thumbnail = document.getElementById(`thumbnail-${index}`);
         thumbnail.src = productImg;
     }
+
     const createOrder = (product) => {
         let user = localStorage.getItem("user");
         user = JSON.parse(user);
@@ -37,11 +38,20 @@ function ProductInventry() {
             axios.post("http://localhost:3001/order/createOrder",{userId,productId})
               .then(result => {
                 console.log(result.data);
-                Swal.fire({
-                  title: 'Order created!',
-                  text: 'Your order has been created successfully',
-                  icon: 'success'
-                })
+                axios.delete(`http://localhost:3001/product/removeStock/${productId}`).then(res=>{
+                  Swal.fire({
+                    title: 'Order created!',
+                    text: 'Your order has been created successfully',
+                    icon: 'success'
+                  })
+                }).catch(err=>{
+                  console.log(err);
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: err.response.data.message,
+                    icon: 'error'
+                  })
+                });
               })
               .catch(err => {
                 console.log(err);

@@ -19,47 +19,47 @@ function Home() {
     }, [])
     console.log(productLength)
     const navigate = useNavigate();
-    const addSupplier=()=>{
+    const addSupplier = () => {
         document.getElementById("view-supplier").style.backgroundColor = 'white';
         document.getElementById("product-inventry").style.backgroundColor = 'white';
-        document.getElementById("notification").style.backgroundColor='white';
-        document.getElementById("order").style.backgroundColor='white';
+        document.getElementById("notification").style.backgroundColor = 'white';
+        document.getElementById("order").style.backgroundColor = 'white';
         const supplier = document.getElementById("add-supplier");
         supplier.style.backgroundColor = 'grey'
         navigate('addsupplier');
     }
-    const viewSupplier=()=>{
+    const viewSupplier = () => {
         document.getElementById("add-supplier").style.backgroundColor = 'white';
         document.getElementById("product-inventry").style.backgroundColor = 'white';
-        document.getElementById("notification").style.backgroundColor='white';
-        document.getElementById("order").style.backgroundColor='white';
+        document.getElementById("notification").style.backgroundColor = 'white';
+        document.getElementById("order").style.backgroundColor = 'white';
         const supplier = document.getElementById("view-supplier");
         supplier.style.backgroundColor = 'grey'
         navigate('');
     }
-    const viewProduct=()=>{
+    const viewProduct = () => {
         document.getElementById("add-supplier").style.backgroundColor = 'white';
-        document.getElementById("view-supplier").style.backgroundColor='white';
-        document.getElementById("order").style.backgroundColor='white';
-        document.getElementById("notification").style.backgroundColor='white';
+        document.getElementById("view-supplier").style.backgroundColor = 'white';
+        document.getElementById("order").style.backgroundColor = 'white';
+        document.getElementById("notification").style.backgroundColor = 'white';
         const supplier = document.getElementById("product-inventry")
         supplier.style.backgroundColor = 'grey'
         navigate('product');
     }
-    const viewStockLevel=()=>{
+    const viewStockLevel = () => {
         document.getElementById("add-supplier").style.backgroundColor = 'white';
-        document.getElementById("view-supplier").style.backgroundColor='white';
-        document.getElementById("order").style.backgroundColor='white';
-        document.getElementById("product-inventry").style.backgroundColor='white';
+        document.getElementById("view-supplier").style.backgroundColor = 'white';
+        document.getElementById("order").style.backgroundColor = 'white';
+        document.getElementById("product-inventry").style.backgroundColor = 'white';
         const supplier = document.getElementById("notification")
         supplier.style.backgroundColor = 'grey'
         navigate('notification');
     }
-    const viewOrder=()=>{
+    const viewOrder = () => {
         document.getElementById("add-supplier").style.backgroundColor = 'white';
-        document.getElementById("view-supplier").style.backgroundColor='white';
-        document.getElementById("product-inventry").style.backgroundColor='white';
-        document.getElementById("notification").style.backgroundColor='white';
+        document.getElementById("view-supplier").style.backgroundColor = 'white';
+        document.getElementById("product-inventry").style.backgroundColor = 'white';
+        document.getElementById("notification").style.backgroundColor = 'white';
         const supplier = document.getElementById("order")
         supplier.style.backgroundColor = 'grey'
         navigate('myOrder');
@@ -72,26 +72,26 @@ function Home() {
             showCancelButton: true,
             confirmButtonText: 'Yes, logout',
             cancelButtonText: 'No, Stay here'
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire('Logout successfully', 'login again.', 'success');
                 localStorage.clear();
                 navigate("/signin")
-            }else{
-                    Swal.fire('Error', 'Failed to logout.', 'error');
-                }
+            } else {
+                Swal.fire('Error', 'Failed to logout.', 'error');
+            }
 
-          });
-      }
+        });
+    }
     return <>
-        <header style={{position:'relative'}}>
-            <div style={{position:'sticky',top:'0',zIndex:'2'}}>
+        <header style={{ position: 'relative' }}>
+            <div style={{ position: 'sticky', top: '0', zIndex: '2' }}>
                 <div className="container-fluid bg-dark text-white w-100 p-3 m-0 position-relative">
-                <h1 className="d-inline"> Supply Chain Management System </h1>
+                    <h1 className="d-inline"> Supply Chain Management System </h1>
                 </div>
                 <div className="container-fluid d-flex bg-white flex-nowrap justify-content-center align-items-around">
                     <span onClick={addSupplier} className="btn m-2" id="add-supplier" >Add Supplier</span>
-                    <span className="btn m-2" style={{backgroundColor:'grey'}} onClick={viewSupplier} id="view-supplier">View All Supplier</span>
+                    <span className="btn m-2" style={{ backgroundColor: 'grey' }} onClick={viewSupplier} id="view-supplier">View All Supplier</span>
                     <span className="btn m-2" id="product-inventry" onClick={viewProduct}>Product inventry</span>
                     <span className="btn m-2" id="notification" onClick={viewStockLevel}>Notification <span className="text-danger">({productLength})</span></span>
                     <span className="btn m-2" id="order" onClick={viewOrder}>Order </span>

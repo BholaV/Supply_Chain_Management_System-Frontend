@@ -10,7 +10,7 @@ export default function StockAlert(){
         }).catch(err => {
             console.log(err);
         });
-    }, [])
+    }, [product])
     return<>
         <div className="container border p-2">
         <h3>Stock Level</h3>

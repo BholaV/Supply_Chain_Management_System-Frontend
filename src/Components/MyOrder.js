@@ -7,8 +7,10 @@ import orderImg from './Img/NoOrder.png'
 import { FaStar } from "react-icons/fa";
 import { MdCurrencyRupee } from "react-icons/md";
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 export default function MyOrder() {
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
   let user = localStorage.getItem("user");
   user = JSON.parse(user);
   const userId = user._id;
@@ -21,7 +23,6 @@ export default function MyOrder() {
   });
   useEffect(() => {
     axios.get(`http://localhost:3001/Order/viewOrder/${userId}`).then(result => {
-      console.log(result.data);
       setOrders(result.data)
     }).catch(err => {
       console.log(err);
@@ -40,8 +41,11 @@ export default function MyOrder() {
     });
     setIsEditing(true);
   }
+
   const removeOrder = (order, index) => {
     const orderId = order._id;
+    const productId = order.productId._id; // Assume the order object contains a productId
+  console.log(orderId+" "+productId)
     Swal.fire({
       title: 'Are you sure?',
       text: 'You will not be able to recover this record!',
@@ -51,20 +55,45 @@ export default function MyOrder() {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
+        // Step 1: Delete the order
         axios.delete(`http://localhost:3001/Order/removeOrder/${orderId}`)
           .then(response => {
-            const newProduct = [...orders];
-            newProduct.splice(index, 1);
-            setOrders(newProduct);
-            Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
+            // Step 2: Add stock after successfully deleting the order
+            axios.post(`http://localhost:3001/product/addStock/${productId}`)
+              .then(stockResponse => {
+                // Step 3: Update the orders list and show success message
+                const newOrders = [...orders];
+                newOrders.splice(index, 1);
+                setOrders(newOrders);
+  
+                Swal.fire({
+                  title: 'Deleted!',
+                  text: 'Your record has been deleted and stock has been added.',
+                  icon: 'success'
+                });
+              })
+              .catch(stockError => {
+                console.error(stockError);
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Failed to add stock after deleting the order.',
+                  icon: 'error'
+                });
+              });
           })
           .catch(error => {
-            console.log(error)
-            Swal.fire('Error', 'Failed to delete record.', 'error');
+            console.error(error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to delete the record.',
+              icon: 'error'
+            });
           });
       }
     });
-  }
+  };
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const status = formData.status;
@@ -181,13 +210,13 @@ export default function MyOrder() {
                       <div className="d-flex icon-content" id='img-content'>
                         <img className="icon" src="https://i.imgur.com/TkPm63y.png" />
                         <div className="ms-2">
-                          <p className="font-weight-bold">On<br />the way</p>
+                          <p className="font-weight-bold">Out<br />for delivery</p>
                         </div>
                       </div>
                       <div className="d-flex icon-content" id='img-content'>
                         <img className="icon" src="https://i.imgur.com/HdsziHP.png" />
                         <div className="ms-2">
-                          <p className="font-weight-bold">Order<br />Arrived</p>
+                          <p className="font-weight-bold">Order<br />Delivered</p>
                         </div>
                       </div>
                     </div>
@@ -202,9 +231,9 @@ export default function MyOrder() {
       </div>
 
       ):(
-        <div className='d-flex w-100 justify-content-center align-items-center' style={{height:'80vh'}}>
-          <img src={orderImg} alt='no image found'/>
-
+        <div  style={{display:'flex',justifyContent:'center',alignItems:'center',height:'80vh',flexDirection:'column'}}>
+          <img src={orderImg} alt='no image found' className='border'/>
+          <button className='btn btn-primary bg-primary' onClick={()=>navigate('/product')} style={{width:'200px'}}>Order Now</button>
         </div>
       )}
 
