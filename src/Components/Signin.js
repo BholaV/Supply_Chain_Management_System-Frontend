@@ -44,9 +44,10 @@ function Signin() {
                 setPassword("");
             })
             .catch(err => {
+                console.log(err)
                 Swal.fire({
                     icon: "error",
-                    title: "Something went wrong",
+                    title: err.response.data.error,
                 });
             });
     };

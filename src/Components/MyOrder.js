@@ -3,7 +3,7 @@ import './MyOrder.css'
 import { MdDelete } from "react-icons/md";
 import axios from 'axios'
 import { FaRegEdit } from "react-icons/fa";
-
+import orderImg from './Img/NoOrder.png'
 import { FaStar } from "react-icons/fa";
 import { MdCurrencyRupee } from "react-icons/md";
 import Swal from 'sweetalert2';
@@ -26,7 +26,7 @@ export default function MyOrder() {
     }).catch(err => {
       console.log(err);
     });
-  }, [])
+  }, [orders])
   const changeImg = (productImg, index) => {
     const thumbnail = document.getElementById(`thumbnail-${index}`);
     thumbnail.src = productImg;
@@ -101,6 +101,7 @@ export default function MyOrder() {
   return <>
     {/* <h2 className='container p-3'>Order Details</h2> */}
     <section >
+      {orders.length!=0 ?(
       <div className="container p-3">
         {orders?.map((data, index) => <section className='border p-2 mt-4'>
           <h2>Order {index + 1}</h2>
@@ -199,6 +200,13 @@ export default function MyOrder() {
         )}
 
       </div>
+
+      ):(
+        <div className='d-flex w-100 justify-content-center align-items-center' style={{height:'80vh'}}>
+          <img src={orderImg} alt='no image found'/>
+
+        </div>
+      )}
 
     </section>
     {isEditing && (

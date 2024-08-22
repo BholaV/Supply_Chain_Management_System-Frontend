@@ -11,12 +11,13 @@ import ProductInventry from './Components/ProductInventry';
 import StockAlert from './Components/StockAlert';
 import MyOrder from './Components/MyOrder';
 import NoRouteFound from './Components/NoRouteFound';
+import Auth2 from './Components/Auth2';
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path='/signup' element={<Signup />} />
-        <Route path='/signin' element={<Signin />} />
+        <Route path='/signin' element={<Auth2><Signin /></Auth2>} />
         <Route path='/' element={<Auth><Home /></Auth>}>
             <Route index element={<SupplierCard />} />
              <Route path='addSupplier' element={<SupplierAccCreation/>}/>

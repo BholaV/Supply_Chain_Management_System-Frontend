@@ -1,7 +1,7 @@
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-
 function Home() {
     const style = {
         // backgroundImage: 'url("./Image/back.jpg")',
@@ -64,17 +64,38 @@ function Home() {
         supplier.style.backgroundColor = 'grey'
         navigate('myOrder');
     }
+    const logout = () => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to logout ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, logout',
+            cancelButtonText: 'No, Stay here'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Logout successfully', 'login again.', 'success');
+                localStorage.clear();
+                navigate("/signin")
+            }else{
+                    Swal.fire('Error', 'Failed to logout.', 'error');
+                }
+
+          });
+      }
     return <>
         <header style={{position:'relative'}}>
             <div style={{position:'sticky',top:'0',zIndex:'2'}}>
-                <h1 className="container-fluid bg-dark text-white p-3 m-0"> Supply Chain Management System</h1>
-                <div className="container-fluid d-flex bg-white justify-content-center align-items-around">
+                <div className="container-fluid bg-dark text-white w-100 p-3 m-0 position-relative">
+                <h1 className="d-inline"> Supply Chain Management System </h1>
+                </div>
+                <div className="container-fluid d-flex bg-white flex-nowrap justify-content-center align-items-around">
                     <span onClick={addSupplier} className="btn m-2" id="add-supplier" >Add Supplier</span>
                     <span className="btn m-2" style={{backgroundColor:'grey'}} onClick={viewSupplier} id="view-supplier">View All Supplier</span>
                     <span className="btn m-2" id="product-inventry" onClick={viewProduct}>Product inventry</span>
                     <span className="btn m-2" id="notification" onClick={viewStockLevel}>Notification <span className="text-danger">({productLength})</span></span>
                     <span className="btn m-2" id="order" onClick={viewOrder}>Order </span>
-
+                    <span className="btn m-2" id="logout" onClick={logout}>logout </span>
                 </div>
             </div>
             <section style={style}>

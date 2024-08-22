@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css';
 import axios from 'axios';
 import { useState } from 'react';
@@ -11,6 +11,7 @@ function Signup() {
     const [error, setError] = useState(null);
     const [passErr, setPassErr] = useState(null);
     const [nameError, setNameError] = useState(null);
+    const navigate = useNavigate();
     const style = {
         backgroundColor: '#e3f2fd', // Light blue background for the whole page
         height: '100vh',
@@ -76,6 +77,7 @@ function Signup() {
                             icon: "success",
                             title: "Account created successfully",
                         });
+                        navigate("/signin")
                     }
                     setEmail("");
                     setPassword("");
