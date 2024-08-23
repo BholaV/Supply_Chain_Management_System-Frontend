@@ -99,7 +99,7 @@ form h3 {
 }
 
 #right {
-    background-image: url('./left.png') !important; /* Replace with your image URL */
+    background-image: url('../images/left.png') !important; /* Replace with your image URL */
     background-size: cover;
     background-position: center;
     width: 300px;
@@ -109,7 +109,7 @@ form h3 {
     margin: 20px;
 }
 #right-signup{
-    background-image: url('./left.png') !important; /* Replace with your image URL */
+    background-image: url('../images/left.png') !important; /* Replace with your image URL */
     background-size: cover;
     background-position: center;
     width: 320px;

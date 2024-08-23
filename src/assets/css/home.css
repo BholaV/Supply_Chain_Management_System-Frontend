@@ -1,0 +1,4 @@
+.bg-grey {
+    background-color: grey !important;
+    color: white; /* Optional: To ensure text remains readable */
+}
