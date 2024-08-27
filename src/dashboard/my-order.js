@@ -23,16 +23,22 @@ export default function MyOrder() {
     orderId: ''
   });
 
+  // Define URLs using environment variables
+  const orderAllUrl = `${process.env.REACT_APP_ORDER_ALL}/${userId}`;
+  const orderRemoveUrl = process.env.REACT_APP_ORDER_REMOVE;
+  const productAddStockUrl = process.env.REACT_APP_PRODUCT_ADD_STOCK;
+  const orderUpdateUrl = process.env.REACT_APP_ORDER_UPDATE;
+
   useEffect(() => {
     // Fetch orders for the user
-    axios.get(`http://localhost:3001/Order/viewOrder/${userId}`)
+    axios.get(orderAllUrl)
       .then(result => {
         setOrders(result.data);
       })
       .catch(err => {
         console.log(err);
       });
-  }, [userId]);
+  }, [orderAllUrl]);
 
   const changeImg = (productImg, index) => {
     const thumbnail = document.getElementById(`thumbnail-${index}`);
@@ -51,7 +57,8 @@ export default function MyOrder() {
   const removeOrder = (order, index) => {
     const orderId = order._id;
     const productId = order.productId._id; // Assume the order object contains a productId
-
+    const removeOrderUrl = `${orderRemoveUrl}/${orderId}`;
+    const addStockUrl = `${productAddStockUrl}/${productId}`;
     Swal.fire({
       title: 'Are you sure?',
       text: 'You will not be able to recover this record!',
@@ -62,10 +69,10 @@ export default function MyOrder() {
     }).then((result) => {
       if (result.isConfirmed) {
         // Step 1: Delete the order
-        axios.delete(`http://localhost:3001/Order/removeOrder/${orderId}`)
+        axios.delete(removeOrderUrl)
           .then(response => {
             // Step 2: Add stock after successfully deleting the order
-            axios.post(`http://localhost:3001/product/addStock/${productId}`)
+            axios.post(addStockUrl)
               .then(stockResponse => {
                 // Step 3: Update the orders list and show success message
                 const newOrders = [...orders];
@@ -103,7 +110,8 @@ export default function MyOrder() {
     e.preventDefault();
     const status = formData.status;
     const orderId = formData.orderId;
-    axios.put(`http://localhost:3001/Order/updateOrder/${orderId}`, { status })
+    const updateOrderUrl = `${orderUpdateUrl}/${orderId}`;
+    axios.put(updateOrderUrl, { status })
       .then(result => {
         Swal.fire({
           icon: 'success',

@@ -129,7 +129,7 @@ export default function SupplierCard() {
     }).then((result) => {
       if (result.isConfirmed) {
         // Send DELETE request to remove supplier
-        axios.delete(`http://localhost:3001/supplier/removeSupplier/${id}`)
+        axios.delete(`${process.env.REACT_APP_SUPPLIER_REMOVE}/${id}`)
           .then(() => {
             const newSupplierDetail = [...supplierDetail];
             newSupplierDetail.splice(index, 1);

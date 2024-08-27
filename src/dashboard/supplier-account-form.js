@@ -104,7 +104,7 @@ export default function SupplierAccCreation() {
 
   return (
     <>
-      <section id="supply-bg" className='d-flex justify-content-center align-items-center bg-grey flex-column p-5' style={style}>
+      <section id="supply-bg" className='d-flex justify-content-center align-items-center  flex-column p-5' style={style}>
         <form className="form" onSubmit={register}>
           <h2 className='text-dark m-1'>Supplier Account Form</h2>
 

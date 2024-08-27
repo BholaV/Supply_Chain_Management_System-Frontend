@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaRupeeSign } from "react-icons/fa";
-import '../assets/css/product-inventory.css'
+import '../assets/css/product-inventory.css';
 import Swal from "sweetalert2";
 
 function ProductInventry() {
@@ -42,9 +42,9 @@ function ProductInventry() {
       confirmButtonText: 'Yes, create order',
       cancelButtonText: 'No, cancel'
     }).then((result) => {
-      if (result.value) {
+      if (result.isConfirmed) {
         // First, check the stock availability
-        axios.get(`http://localhost:3001/product/checkStock/${productId}`)
+        axios.get(`${process.env.REACT_APP_PRODUCT_CHECK_STOCK}/${productId}`)
           .then(response => {
             const { stockAvailable } = response.data;
 
@@ -55,7 +55,7 @@ function ProductInventry() {
                   console.log(orderResult.data);
 
                   // Remove stock after the order is created
-                  axios.delete(`http://localhost:3001/product/removeStock/${productId}`)
+                  axios.delete(`${process.env.REACT_APP_PRODUCT_REMOVE_STOCK}/${productId}`)
                     .then(res => {
                       Swal.fire({
                         title: 'Order created!',
@@ -67,7 +67,7 @@ function ProductInventry() {
                       console.log(err);
                       Swal.fire({
                         title: 'Oops!',
-                        text: err.response.data.message,
+                        text: err.response?.data?.message || 'An error occurred',
                         icon: 'error'
                       });
                     });
@@ -112,9 +112,9 @@ function ProductInventry() {
 
             {/* Thumbnails for changing the main product image */}
             <div className="d-flex w-100 justify-content-center p-2">
-              {data.images?.map((product, ind) =>
-                <div key={ind} className="border ms-4" style={{ cursor: 'pointer' }} onClick={() => changeImg(product, index)}>
-                  <img src={product} alt="image" style={{ width: '50px', height: '50px' }} />
+              {data.images?.map((productImg, ind) =>
+                <div key={ind} className="border ms-4" style={{ cursor: 'pointer' }} onClick={() => changeImg(productImg, index)}>
+                  <img src={productImg} alt="image" style={{ width: '50px', height: '50px' }} />
                 </div>
               )}
             </div>
