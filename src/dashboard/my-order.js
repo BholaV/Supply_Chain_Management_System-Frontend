@@ -253,7 +253,7 @@ export default function MyOrder() {
             ))}
           </div>
         ) : (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh', flexDirection: 'column' }}>
+          <div className='d-flex justify-content-center align-items-center flex-column' style={{ height: '80vh' }}>
             <img src={orderImg} alt='no image found' className='border' />
             <button className='btn btn-primary bg-primary' onClick={() => navigate('/product')} style={{ width: '200px' }}>Order Now</button>
           </div>
