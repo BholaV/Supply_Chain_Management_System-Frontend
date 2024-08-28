@@ -34,8 +34,7 @@ export default function SupplierCard() {
 
   useEffect(()=>{
     dispatch(fetchSuppliers());
-    setSupplierDetail(supplierList);
-  },[]);
+  },[dispatch]);
   
   console.log(supplierList)
   // Handle click on edit button
@@ -158,7 +157,7 @@ export default function SupplierCard() {
       {/* Display list of suppliers */}
       {!loading?(
       <section id='supply'>
-        {supplierDetail?.map((data, index) =>
+        {supplierList?.map((data, index) =>
           <div className="card-container" key={index}>
             <span className="pro">PRO</span>
             <img className="round" src="https://randomuser.me/api/portraits/women/79.jpg" alt="user" />
