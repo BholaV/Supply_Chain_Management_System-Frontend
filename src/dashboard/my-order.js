@@ -302,3 +302,6 @@ export default function MyOrder() {
     </>
   );
 }
+
+
+// {localStorage.getItem("user")}

@@ -3,6 +3,8 @@ import '../assets/css/SupplierCard.css';  // Import CSS for styling
 import { useEffect, useState } from "react";  // Import hooks for state management
 import axios from "axios";  // Import axios for HTTP requests
 import Swal from "sweetalert2";  // Import SweetAlert2 for alerts
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSuppliers } from "../redux/slice";
 
 export default function SupplierCard() {
   // State for supplier details, edit mode, current supplier, and form data
@@ -11,6 +13,8 @@ export default function SupplierCard() {
   const [currentSupplier, setCurrentSupplier] = useState(null);
   const [phoneErr, setPhonErr] = useState(null);
   const [productCategoryErr, setProductCategoryErr] = useState(null);
+  const dispatch = useDispatch();
+  const {supplierList,loading} = useSelector(store=>store.Supplier);
   const [formData, setFormData] = useState({
     contact: '',
     productCategory: '',
@@ -18,16 +22,22 @@ export default function SupplierCard() {
 
 
   // Fetch supplier details on component mount
-  useEffect(() => {
-    axios.get(process.env.REACT_APP_SUPPLIER_ALL)
-      .then(result => {
-        setSupplierDetail(result.data.supplier);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(process.env.REACT_APP_SUPPLIER_ALL)
+  //     .then(result => {
+  //       setSupplierDetail(result.data.supplier);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
+  useEffect(()=>{
+    dispatch(fetchSuppliers());
+    setSupplierDetail(supplierList);
+  },[]);
+  
+  console.log(supplierList)
   // Handle click on edit button
   const handleEditClick = (supplier) => {
     setPhonErr("");
@@ -146,6 +156,7 @@ export default function SupplierCard() {
   return (
     <>
       {/* Display list of suppliers */}
+      {!loading?(
       <section id='supply'>
         {supplierDetail?.map((data, index) =>
           <div className="card-container" key={index}>
@@ -170,6 +181,9 @@ export default function SupplierCard() {
           </div>
         )}
       </section>
+      ):(<div>
+        <h2>Loading...</h2>
+      </div>)}
 
       {/* Edit form for updating supplier details */}
       {isEditing && (

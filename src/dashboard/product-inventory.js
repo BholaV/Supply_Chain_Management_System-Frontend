@@ -2,24 +2,37 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaRupeeSign } from "react-icons/fa";
 import '../assets/css/product-inventory.css';
+import { useDispatch, useSelector } from "react-redux"
+
 import Swal from "sweetalert2";
+import store from "../redux/store";
+import { fetchProducts } from "../redux/slice";
 
 function ProductInventry() {
   // State to store the list of products
   const [product, setProduct] = useState([]);
-
+  const dispatch = useDispatch();
+  //getting product data by using redux-toolkit
+  const { productList,loading } = useSelector(store => store.Product)
   // Fetch all products when the component mounts
+
+  // useEffect(() => {
+  // axios.get(process.env.REACT_APP_PRODUCT_VIEW_ALL)
+  //   .then(result => {
+  //     // Set products data from API response
+  //     setProduct(result.data.result);
+  //   })
+  //   .catch(err => {
+  //     // Log any errors during the fetch
+  //     console.log(err);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    axios.get(process.env.REACT_APP_PRODUCT_VIEW_ALL)
-      .then(result => {
-        // Set products data from API response
-        setProduct(result.data.result);
-      })
-      .catch(err => {
-        // Log any errors during the fetch
-        console.log(err);
-      });
-  }, []);
+    dispatch(fetchProducts());
+    setProduct(productList);
+  }, [])
+
 
   // Function to change the main product image when a thumbnail is clicked
   const changeImg = (productImg, index) => {
@@ -104,6 +117,7 @@ function ProductInventry() {
   return (
     <>
       {/* Main section for displaying products */}
+      {!loading?(
       <section id="product-inventry-parent">
         {product?.map((data, index) => (
           <div id="product-invt" key={index}>
@@ -120,7 +134,7 @@ function ProductInventry() {
             </div>
 
             {/* Product title */}
-            <h4>{data.title.slice(0, 15)}</h4>
+            <h4>{data.title?.slice(0, 15)}</h4>
             {/* Product category */}
             <p className="text-white fw-bold fs-5 m-1">
               Category : <b className="text-dark">{data.categoryName}</b>
@@ -138,6 +152,9 @@ function ProductInventry() {
           </div>
         ))}
       </section>
+      ):(<div>
+        <h1>Loading...</h1>
+      </div>)}
     </>
   );
 }
